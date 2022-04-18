@@ -1,0 +1,34 @@
+spring:
+  profiles:
+    active: local
+
+---
+spring:
+  profiles: local
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        # acks = 0 -> no guarantee (Not Recommended)
+        # acks = 1 -> guarantee message is written to a leader (Default)
+        # acks = all -> guarantee message is written to a leader and to all replicas
+        acks: all
+        # retries = 2147483647 (Default)
+        retries: 10
+        # retries every 1000ms
+        retry.backoff.ms: 1000
+    admin:
+      properties:
+        bootstrap.servers: localhost:9092,localhost:9093,localhost:9094
+    template:
+      default-topic: library-events
+---
+spring:
+  profiles: dev
+  kafka:
+    producer:
+      bootstrap-servers: dev:9092,dev:9093,dev:9094
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
